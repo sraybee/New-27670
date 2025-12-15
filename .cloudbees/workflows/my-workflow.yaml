@@ -1,16 +1,21 @@
 apiVersion: automation.cloudbees.io/v1alpha1
 kind: workflow
-name: My workflow
+name: cbp-27670-workflow-new
+
 on:
-  push:
-    branches:
-      - "**"
   workflow_dispatch:
+  
 jobs:
-  build:
+  cbp-27670-workflow-new-job:
     steps:
-      - name: Say hello
-        uses: docker://golang:1.20.3-alpine3.17
-        shell: sh
-        run: |
-          echo "hello world"
+      - name: checkout-cbp-new-27670
+        uses: cloudbees-io/checkout@v1
+        
+      - name: jfrog-actions-workflow-download-cbp-27670-new
+        uses: cloudbees-io/jfrog-artifactory-download-file@v1
+        with:
+          url: ${{ vars.JFROG_URL }}
+          username: ${{ vars.JFROG_ACTIONS_USERNAME }}
+          password: ${{ secrets.JFROG_ACTIONS_PASSWORD }}
+          file-path: ${{ cloudbees.workspace }}/download/jfrog_repo_test.zip
+          artifactory-path: example-repo-local/jfrogtest/test.zip
